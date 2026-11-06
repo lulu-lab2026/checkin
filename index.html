@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Check.In</title>
+  <meta name="description" content="Check.In — control de horas para freelancers. Registra tu jornada, tus Check-In y Check-Out y consulta tus horas.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#F5F6FA">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+
+  <!-- iOS home-screen support -->
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Check.In">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       ICON SPRITE — line icons referenced with <use href="#i-…">
+       ============================================================ -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="sprite" aria-hidden="true">
+    <defs>
+      <symbol id="i-brand" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 2.5V5"/><path d="M9.5 2.5h5"/><!-- stopwatch --><path d="m8.5 13 2.4 2.4 4.6-4.6"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2.5"/><path d="M8 7V5.5A2.5 2.5 0 0 1 10.5 3h3A2.5 2.5 0 0 1 16 5.5V7"/><path d="M2.5 12.5h19"/></symbol>
+      <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h3a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-3"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></symbol>
+      <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h3"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4.5 22V3.5"/><path d="M4.5 4h13l-2.5 4.75L17.5 13.5h-13"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12"/><path d="M7 3c0 4.5 10 4.5 10 9s-10 4.5-10 9M17 3c0 4.5-10 4.5-10 9s10 4.5 10 9"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M6 11H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ============================================================
+       TOP NAVIGATION
+       ============================================================ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#inicio" aria-label="Check.In">
+        <span class="brand-mark"><svg class="icon"><use href="#i-brand"/></svg></span>
+        <span class="brand-name">Check<span class="brand-dot">.</span>In</span>
+      </a>
+
+      <nav class="tabs" data-i18n-attr="aria-label:nav.label">
+        <a class="tab" href="#inicio" data-route="inicio">
+          <svg class="icon"><use href="#i-home"/></svg>
+          <span data-i18n="nav.home">Inicio</span>
+        </a>
+        <a class="tab" href="#registros" data-route="registros">
+          <svg class="icon"><use href="#i-calendar"/></svg>
+          <span data-i18n="nav.records">Registros</span>
+        </a>
+      </nav>
+
+      <div class="topbar-actions">
+        <button class="icon-btn" id="installBtn" type="button" hidden data-i18n-attr="aria-label:install.button;title:install.button">
+          <svg class="icon"><use href="#i-download"/></svg>
+        </button>
+        <label class="lang-select">
+          <svg class="icon"><use href="#i-globe"/></svg>
+          <span class="lang-code" id="langCode" aria-hidden="true">ES</span>
+          <svg class="icon chev" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+          <span class="sr-only" data-i18n="nav.language">Idioma</span>
+          <select id="langSelect"></select>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="app">
+
+    <!-- ==========================================================
+         VIEW: INICIO
+         ========================================================== -->
+    <section class="view" id="view-inicio" data-view="inicio">
+      <div class="home-grid">
+
+        <div class="home-main">
+          <!-- Date / clock / status -->
+          <article class="card hero">
+            <div class="hero-top">
+              <div>
+                <p class="eyebrow" id="greeting"></p>
+                <h1 class="hero-date" id="todayDate"></h1>
+              </div>
+              <time class="clock" id="clock">--:--</time>
+            </div>
+            <div class="hero-bottom">
+              <span class="status-chip" id="statusChip" data-status="idle">
+                <span class="dot"></span><span id="statusText"></span>
+              </span>
+              <div class="worked">
+                <span class="worked-label" data-i18n="home.workedToday">Trabajado hoy</span>
+                <span class="worked-value" id="workedLive">00:00:00</span>
+              </div>
+            </div>
+            <p class="hero-note" id="heroNote" hidden></p>
+          </article>
+
+          <!-- The four main actions -->
+          <div class="actions">
+            <button class="action" type="button" id="btnStart" data-action="start" data-tone="start">
+              <span class="action-icon"><svg class="icon"><use href="#i-briefcase"/></svg></span>
+              <span class="action-text">
+                <span class="action-title" data-i18n="actions.start">Inicio de Trabajo</span>
+                <span class="action-hint" data-i18n="actions.startHint"></span>
+              </span>
+            </button>
+            <button class="action" type="button" id="btnIn" data-action="checkIn" data-tone="in">
+              <span class="action-icon"><svg class="icon"><use href="#i-login"/></svg></span>
+              <span class="action-text">
+                <span class="action-title" data-i18n="actions.checkIn">Check-In</span>
+                <span class="action-hint" data-i18n="actions.checkInHint"></span>
+              </span>
+            </button>
+            <button class="action" type="button" id="btnOut" data-action="checkOut" data-tone="out">
+              <span class="action-icon"><svg class="icon"><use href="#i-logout"/></svg></span>
+              <span class="action-text">
+                <span class="action-title" data-i18n="actions.checkOut">Check-Out</span>
+                <span class="action-hint" data-i18n="actions.checkOutHint"></span>
+              </span>
+            </button>
+            <button class="action" type="button" id="btnEnd" data-action="end" data-tone="end">
+              <span class="action-icon"><svg class="icon"><use href="#i-flag"/></svg></span>
+              <span class="action-text">
+                <span class="action-title" data-i18n="actions.end">Fin de Trabajo</span>
+                <span class="action-hint" data-i18n="actions.endHint"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Today's log -->
+        <article class="card log-card">
+          <header class="card-head">
+            <h2 class="card-title">
+              <svg class="icon"><use href="#i-clock"/></svg>
+              <span data-i18n="log.title">Registro de hoy</span>
+            </h2>
+            <span class="badge" id="logCount">0</span>
+          </header>
+          <ol class="timeline" id="logList"></ol>
+          <p class="empty" id="logEmpty" data-i18n="log.empty"></p>
+          <div class="total-bar" id="totalBar" hidden>
+            <svg class="icon"><use href="#i-hourglass"/></svg>
+            <span><span data-i18n="total.label">Total de Horas</span>: <strong id="totalValue"></strong></span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         VIEW: REGISTROS
+         ========================================================== -->
+    <section class="view" id="view-registros" data-view="registros" hidden>
+      <div class="records-grid">
+
+        <article class="card calendar-card">
+          <header class="cal-head">
+            <button class="icon-btn" type="button" id="calPrev" data-i18n-attr="aria-label:records.prev;title:records.prev">
+              <svg class="icon"><use href="#i-chevron-left"/></svg>
+            </button>
+            <div class="cal-title-wrap">
+              <h2 class="cal-title" id="calTitle"></h2>
+              <button class="link-btn" type="button" id="calToday" data-i18n="records.today">Hoy</button>
+            </div>
+            <button class="icon-btn" type="button" id="calNext" data-i18n-attr="aria-label:records.next;title:records.next">
+              <svg class="icon"><use href="#i-chevron-right"/></svg>
+            </button>
+          </header>
+
+          <div class="cal-weekdays" id="calWeekdays" aria-hidden="true"></div>
+          <div class="cal-grid" id="calGrid" role="grid"></div>
+
+          <div class="month-stats">
+            <div class="stat">
+              <span class="stat-label" data-i18n="records.monthTotal">Total del mes</span>
+              <span class="stat-value" id="statTotal">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label" data-i18n="records.daysWorked">Días trabajados</span>
+              <span class="stat-value" id="statDays">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label" data-i18n="records.average">Media por día</span>
+              <span class="stat-value" id="statAvg">—</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card detail-card" id="detailCard">
+          <header class="card-head">
+            <div>
+              <p class="eyebrow" data-i18n="records.detail">Detalle del día</p>
+              <h2 class="card-title" id="detailTitle"></h2>
+            </div>
+            <button class="icon-btn danger" type="button" id="deleteDayBtn" hidden data-i18n-attr="aria-label:records.delete;title:records.delete">
+              <svg class="icon"><use href="#i-trash"/></svg>
+            </button>
+          </header>
+          <div id="detailBody"></div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast notifications (visual feedback) -->
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- Reusable modal dialog (confirmations, install help) -->
+  <dialog class="modal" id="modal">
+    <form method="dialog" class="modal-inner">
+      <span class="modal-icon" id="modalIcon"><svg class="icon"><use href="#i-info"/></svg></span>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <p class="modal-body" id="modalBody"></p>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel" id="modalCancel"></button>
+        <button class="btn primary" value="confirm" id="modalConfirm"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <noscript><p class="noscript">Check.In necesita JavaScript. / Check.In requires JavaScript.</p></noscript>
+
+  <!-- Scripts (plain scripts, order matters: engine → languages → data → app) -->
+  <script src="js/i18n.js"></script>
+  <script src="js/lang/es.js"></script>
+  <script src="js/lang/en.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/time.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

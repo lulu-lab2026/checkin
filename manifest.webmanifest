@@ -1,0 +1,22 @@
+{
+  "name": "Check.In — Control de horas",
+  "short_name": "Check.In",
+  "description": "Registra tu jornada, tus Check-In y Check-Out y consulta tus horas trabajadas.",
+  "id": "./",
+  "start_url": "./index.html#inicio",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F6FA",
+  "theme_color": "#F5F6FA",
+  "lang": "es",
+  "categories": ["productivity", "business"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Registros", "short_name": "Registros", "url": "./index.html#registros", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
